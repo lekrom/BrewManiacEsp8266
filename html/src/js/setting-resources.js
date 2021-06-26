@@ -2,103 +2,103 @@
     var  TypeSwitchYesNo=1;
     var  TypeSwitchOnOff=2;
         var EEPROM = {
-            "s_kp": {
-                max: 100,
-                min: -100,
+            "s_kp": {           // Morri to fix
+                max: 250,
+                min: 0,
                 inc: 1,
                 decode: function(v) {
-                    return v - 100;
+                    return v;
                 },
                 encode: function(v) {
-                    return v + 100;
+                    return v;
                 }
             },
-            "s_ki": {
-                max: 155,
-                min: -100,
-                inc: 1,
+            "s_ki": {           // Morri to fix
+                max: 2.5,
+                min: 0,
+                inc: 0.01,
                 decode: function(v) {
-                    return v - 100;
+                    return v / 100;
                 },
                 encode: function(v) {
-                    return v + 100;
+                    return v * 100;
                 }
             },
-            "s_kd": {
-                max: 100,
-                min: -100,
-                inc: 1,
-                decode: function(v) {
-                    return v - 100;
+            "s_kd": {          // Morri to fix
+                max: 25000,
+                min: 0,
+                inc: 100,
+                decode: function (v) {
+                    return v*100;
                 },
-                encode: function(v) {
-                    return v + 100;
+                encode: function (v) {
+                    return Math.round(v/100);
                 }
             },
             "s_kp2": {
-                max: 100,
-                min: -100,
+                max: 250,
+                min: 0,
                 inc: 1,
-                decode: function(v) {
-                    return v - 100;
+                decode: function (v) {
+                    return v;
                 },
-                encode: function(v) {
-                    return v + 100;
+                encode: function (v) {
+                    return v;
                 }
             },
             "s_ki2": {
-                max: 155,
-                min: -100,
-                inc: 1,
-                decode: function(v) {
-                    return v - 100;
+                max: 2.5,
+                min: 0,
+                inc: 0.01,
+                decode: function (v) {
+                    return v / 100;
                 },
-                encode: function(v) {
-                    return v + 100;
+                encode: function (v) {
+                    return v * 100;
                 }
             },
             "s_kd2": {
-                max: 100,
-                min: -100,
-                inc: 1,
-                decode: function(v) {
-                    return v - 100;
+                max: 25000,
+                min: 0,
+                inc: 100,
+                decode: function (v) {
+                    return v*100;
                 },
-                encode: function(v) {
-                    return v + 100;
+                encode: function (v) {
+                    return Math.round(v/100);
                 }
             },
             "s_kpall": {
-                max: 100,
-                min: -100,
+                max: 250,
+                min: 0,
                 inc: 1,
-                decode: function(v) {
-                    return v - 100;
+                decode: function (v) {
+                    return v;
                 },
-                encode: function(v) {
-                    return v + 100;
+                encode: function (v) {
+                    return v;
                 }
             },
             "s_kiall": {
-                max: 155,
-                min: -100,
-                inc: 1,
-                decode: function(v) {
-                    return v - 100;
+                max: 2.5,
+                min: 0,
+                inc: 0.01,
+                decode: function (v) {
+                    return v / 100;
                 },
-                encode: function(v) {
-                    return v + 100;
+                encode: function (v) {
+                    return v * 100;
                 }
             },
             "s_kdall": {
-                max: 100,
-                min: -100,
-                inc: 1,
-                decode: function(v) {
-                    return v - 100;
+                max: 25000,
+                min: 0,
+                inc: 100,
+                decode: function (v) {
+                    return v*100;
                 },
-                encode: function(v) {
-                    return v + 100;
+                encode: function (v) {
+                    return Math.round(v/100);
                 }
             },
             "s_sample_time": {
