@@ -1584,9 +1584,9 @@ void setHeatingElementsInUse(byte elements)
         kd=readSetting(PS_kD_AllOn);
 	}
 
-    thePID.SetTunings((double)kp-100.0,
-					  (double)((ki-100.0) / 250.0),
-					  (double)kd-100.0);
+	thePID.SetTunings((double)kp,						// Changed by Morri
+					  (double)(ki/100.0),
+					  (double)kd*100.0);
 }
 
 #define HeatingStagePreMash 0
@@ -1626,10 +1626,10 @@ void saveTunning(void)
 	}
 
 
-    updateSetting(kpAddr,(byte)( kp + 100.0));
-	updateSetting(kiAddr,(byte)( ki * 250.0 +100));
-	updateSetting(kdAddr,(byte)( kd + 100.0));
-	wiSettingChanged(kdAddr,(byte)( kd + 100.0));// notify setting change.
+	updateSetting(kpAddr,(byte)( kp));					// Changed by Morri
+	updateSetting(kiAddr,(byte)( ki * 100));
+	updateSetting(kdAddr,(byte)( kd / 100.0));
+	wiSettingChanged(kdAddr,(byte)( kd / 100.0));// notify setting change.*/
 	commitSetting();
 }
 
@@ -1642,10 +1642,11 @@ void saveTunning(void)
     double  kd = autoTune.GetKd();
     thePID.SetTunings(kp,ki,kd);
 
-    updateSetting(PS_kP,(byte)( kp + 100.0));
-	updateSetting(PS_kI,(byte)( ki * 250.0 +100));
-	updateSetting(PS_kD,(byte)( kd + 100.0));
-	wiSettingChanged(PS_kD,(byte)( kd + 100.0));// notify setting change.
+	// Changed by Morri
+	updateSetting(PS_kP,(byte)(kp));
+	updateSetting(PS_kI,(byte)(ki * 100.0));
+	updateSetting(PS_kD,(byte)(kd / 100.0));
+	wiSettingChanged(PS_kD,(byte)( kd / 100.0));// notify setting change.
 	commitSetting();
 }
 #endif
@@ -1902,9 +1903,9 @@ void heatInitialize(void)
 // the should be call before REAL action instead of system startup
 void heatLoadParameters(void)
 {
-	thePID.SetTunings((double)readSetting(PS_kP)-100.0,
-					  (double)((readSetting(PS_kI)-100.0) / 250.0),
-					  (double)readSetting(PS_kD)-100.0);
+	thePID.SetTunings((double)(readSetting(PS_kP)),						// Changed by Morri
+					  (double)(readSetting(PS_kI)/100.0),
+					  (double)(readSetting(PS_kD)*100.0));
 
 	_heatWindowSize = readSetting(PS_WindowSize);
  	thePID.SetSampleTime((int)readSetting(PS_SampleTime) * 250);
@@ -2507,8 +2508,19 @@ SettingEditor settingEditor;
 // *************************
 //*  PID & PWD settings
 // *************************
+// Added by Morri
+void displayDivide100(int data)
+{
+	float fvalue=(float)data / 100.0;
+	uiSettingDisplayNumber(fvalue,2);
+}
 
-
+// Added by Morri
+void displayMultiply100(int data)
+{
+	float fvalue=(float)data * 100.0;
+	uiSettingDisplayNumber(fvalue,0);
+}
 
 void displayOffset100(int data)
 {
@@ -2761,19 +2773,21 @@ bool distillRecipeEventHandler(byte)
 const SettingItem pidSettingItems[] PROGMEM=
 {
  #if SecondaryHeaterSupport == true
-/*0*/{STR(kP_1),          & displayOffset100,  PS_kP,200,0},
-/*1*/{STR(kI_1),          & displayOffset100,  PS_kI, 255,0},
-/*2*/{STR(kD_1),          & displayOffset100,  PS_kD, 200,0},
-/*3*/{STR(kP_2),          & displayOffset100,  PS_kP_Secondary,200,0},
-/*4*/{STR(kI_2),          & displayOffset100,  PS_kI_Secondary, 255,0},
-/*5*/{STR(kD_2),          & displayOffset100,  PS_kD_Secondary, 200,0},
-/*6*/{STR(kP_both),          & displayOffset100,  PS_kP_AllOn,200,0},
-/*7*/{STR(kI_both),          & displayOffset100,  PS_kI_AllOn, 255,0},
-/*8*/{STR(kD_both),          & displayOffset100,  PS_kD_AllOn, 200,0},
+// Changed by Morri to scaler PID values to standard conventions
+ /*0*/{STR(kP_1),         & displaySimpleInteger,  PS_kP,250,0},
+/*1*/{STR(kI_1),          & displayDivide100,  PS_kI, 250,0},
+/*2*/{STR(kD_1),          & displayMultiply100,  PS_kD, 250,0},
+/*3*/{STR(kP_2),          & displaySimpleInteger,  PS_kP_Secondary,250,0},
+/*4*/{STR(kI_2),          & displayDivide100,  PS_kI_Secondary, 250,0},
+/*5*/{STR(kD_2),          & displayMultiply100,  PS_kD_Secondary, 250,0},
+/*6*/{STR(kP_both),       & displaySimpleInteger,  PS_kP_AllOn,250,0},
+/*7*/{STR(kI_both),       & displayDivide100,  PS_kI_AllOn, 250,0},
+/*8*/{STR(kD_both),       & displayMultiply100,  PS_kD_AllOn, 250,0},
 #else
-/*0*/{STR(kP),          & displayOffset100,  PS_kP,200,0},
-/*1*/{STR(kI),          & displayOffset100,  PS_kI, 255,0},
-/*2*/{STR(kD),          & displayOffset100,  PS_kD, 200,0},
+// Changed by Morri to scaler PID values to standard conventions
+/*0*/{STR(kP),          & displaySimpleInteger,  PS_kP,250,0},
+/*1*/{STR(kI),          & displayDivide100,  PS_kI, 250,0},
+/*2*/{STR(kD),          & displayMultiply100,  PS_kD, 250,0},
 #endif
 /*3,9*/{STR(SampleTime),  & displayMultiply250,PS_SampleTime,8000/250 /*3500/250*/,1500/250},
 /*4,10*/{STR(WindowSet_ms),& displayMultiply250,PS_WindowSize,40000/250 /*7500/250*/,4000/250},
