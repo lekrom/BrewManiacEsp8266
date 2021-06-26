@@ -883,7 +883,7 @@ void uiDisplaySettingPercentage(int number)
 
 void uiSettingDisplayNumber(float number,byte precision)
 {
-	uiSettingDisplayField((float)number,0,' ');
+	uiSettingDisplayField((float)number,precision,' ');
 }
 
 
