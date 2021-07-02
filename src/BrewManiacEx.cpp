@@ -1587,7 +1587,7 @@ void setup(void){
 
 	// 9. display IP
 	startBrewManiac();
-	displayIP(WiFiSetup.isApMode());
+	//displayIP(WiFiSetup.isApMode());
 
 	DebugOut("End Setup\n");
 }
